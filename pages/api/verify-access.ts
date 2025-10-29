@@ -19,15 +19,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Simulate a membership check (we’ll connect GHL API later)
-    return res.status(200).json({
-      isMember: true,
-      membershipLevel: "TrailPass",
-      activeApps: [app],
-      email,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Server error" });
-  }
+  // Log who is being checked (optional)
+  console.log("Access check:", { email, app });
+
+  // Simulate a membership check (we’ll connect GHL API later)
+  return res.status(200).json({
+    isMember: true,
+    membershipLevel: "TrailPass",
+    activeApps: [app],
+    email,
+  });
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: "Server error" });
 }
+
