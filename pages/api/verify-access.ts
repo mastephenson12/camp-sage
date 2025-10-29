@@ -13,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Handle both JSON and x-www-form-urlencoded data
   const email = req.body.email || req.body["email"];
   const app = req.body.app || req.body["app"];
-  const status = req.body.status || "active"; // <-- new line
+  const status = req.body.status || "active";
 
   if (!email || !app) {
     return res.status(400).json({ error: "Missing email or app" });
