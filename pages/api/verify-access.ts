@@ -19,8 +19,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-  // Log who is being checked (optional)
-  console.log("Access check:", { email, app });
+  // Handle both “added” and “removed” membership updates
+  const status = req.body.status || "active";
+
+  // Log who triggered it and their status
+  console.log("Access update:", { email, app, status });
 
   // Simulate a membership check (we’ll connect GHL API later)
   return res.status(200).json({
@@ -33,4 +36,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.error(error);
   return res.status(500).json({ error: "Server error" });
 }
-
