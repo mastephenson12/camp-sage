@@ -13,26 +13,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Handle both JSON and x-www-form-urlencoded data
   const email = req.body.email || req.body["email"];
   const app = req.body.app || req.body["app"];
+  const status = req.body.status || "active"; // <-- new line
 
   if (!email || !app) {
     return res.status(400).json({ error: "Missing email or app" });
   }
 
   try {
-  // Handle both “added” and “removed” membership updates
-  const status = req.body.status || "active";
+    // Log who triggered it and their status
+    console.log("Access update:", { email, app, status });
 
-  // Log who triggered it and their status
-  console.log("Access update:", { email, app, status });
-
-  // Simulate a membership check (we’ll connect GHL API later)
-  return res.status(200).json({
-    isMember: true,
-    membershipLevel: "TrailPass",
-    activeApps: [app],
-    email,
-  });
-} catch (error) {
-  console.error(error);
-  return res.status(500).json({ error: "Server error" });
+    // Simulate a membership check (we’ll connect GHL API later)
+    return res.status(200).json({
+      isMember: true,
+      membershipLevel: "TrailPass",
+      activeApps: [app],
+      email,
+      status,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Server error" });
+  }
 }
