@@ -1,16 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-/**
- * This endpoint receives webhook data from GoHighLevel.
- * It now supports both JSON and form submissions.
- */
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Handle both JSON and x-www-form-urlencoded data
   const email = req.body.email || req.body["email"];
   const app = req.body.app || req.body["app"];
   const status = req.body.status || "active";
@@ -20,10 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Log who triggered it and their status
     console.log("Access update:", { email, app, status });
 
-    // Simulate a membership check (we’ll connect GHL API later)
     return res.status(200).json({
       isMember: true,
       membershipLevel: "TrailPass",
