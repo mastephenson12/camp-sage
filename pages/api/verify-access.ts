@@ -14,17 +14,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    console.log("Access update:", { email, app, status });
+    // Query GoHighLevel for contact by email
+    const ghlRes = await fetch(`https://rest.gohighlevel.com/v1/contacts/lookup?email=${encodeURIComponent(email)}`, {
+      headers: { Authorization: `Bearer ${process.env.GHL_API_KEY}` },
+    });
+
+    const contactData = await ghlRes.json();
+
+    // Check for TrailPass tag
+    const hasTrailPass =
+      contactData?.contact?.tags?.includes("TrailPass_Member") || false;
+
+    console.log("Access check:", { email, hasTrailPass });
 
     return res.status(200).json({
-      isMember: true,
-      membershipLevel: "TrailPass",
-      activeApps: [app],
+      isMember: hasTrailPass,
+      membershipLevel: hasTrailPass ? "TrailPass" : "None",
+      activeApps: hasTrailPass ? [app] : [],
       email,
       status,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error checking GHL:", error);
     return res.status(500).json({ error: "Server error" });
   }
 }
