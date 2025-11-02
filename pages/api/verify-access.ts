@@ -22,8 +22,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const contactData = await ghlRes.json();
 
     // Check for TrailPass tag
-    const hasTrailPass =
-      contactData?.contact?.tags?.includes("TrailPass_Member") || false;
+    // Normalize all tags to lowercase for flexible matching
+const tags = (contactData?.contact?.tags || []).map((t: string) =>
+  t.trim().toLowerCase()
+);
+
+const hasTrailPass = tags.some(
+  (t: string) =>
+    t === "trailpass_member" ||
+    t === "trailpass member" ||
+    t.includes("trailpass")
+);
+
 
     console.log("Access check:", { email, hasTrailPass });
 
