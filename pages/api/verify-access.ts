@@ -35,7 +35,13 @@ const hasTrailPass = tags.some(
 );
 
 
-    console.log("Access check:", { email, hasTrailPass });
+    console.log("Access check:", {
+  email,
+  hasTrailPass,
+  tags,
+  rawData: contactData?.contact,
+});
+
 
     return res.status(200).json({
       isMember: hasTrailPass,
